@@ -49,19 +49,19 @@ Feature: Usage of deployment artifacts with Puccini
     And The application's deployment must succeed after 15 minutes
 
       # test preserved deployment artifats
-    When I download the remote file "/home/ubuntu/Artifacts/toBePreserved.txt" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "Guobao"
+    When I download the remote file "/home/ubuntu/Artifacts/toBePreserved.txt" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "csars/artifact-test/toBePreserved.txt"
-    When I download the remote file "/home/ubuntu/ArtifactsYamlOverride/toBePreserved.txt" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "Guobao"
+    When I download the remote file "/home/ubuntu/ArtifactsYamlOverride/toBePreserved.txt" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "csars/artifact-test/toBePreserved.txt"
 
     # test overridding from Alien4cloud
-    When I download the remote file "/home/ubuntu/Artifacts/toOverride.txt" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "Guobao"
+    When I download the remote file "/home/ubuntu/Artifacts/toOverride.txt" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "data/toOverride.txt"
 
     #test overridding from yaml topology csar
-    When I download the remote file "/home/ubuntu/ArtifactsYamlOverride/toOverrideFromYaml.txt" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "Guobao"
+    When I download the remote file "/home/ubuntu/ArtifactsYamlOverride/toOverrideFromYaml.txt" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "topologies/artifact_test/toOverrideFromYaml.txt"
 
     #test artifacts of the relationship
-    When I download the remote file "/home/ubuntu/relationship/ArtifactsYamlOverride/settingsRel.properties" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "Guobao"
+    When I download the remote file "/home/ubuntu/relationship/ArtifactsYamlOverride/settingsRel.properties" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "csars/artifact-test/settingsRel.properties"

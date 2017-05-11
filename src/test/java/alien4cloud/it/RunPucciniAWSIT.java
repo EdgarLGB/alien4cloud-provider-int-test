@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
  * 
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(features = { "classpath:features/puccini/aws/" }, format = { "pretty", "html:target/cucumber/puccini/aws",
+@CucumberOptions(features = { "classpath:features/puccini/aws/deployment_artifacts.feature" }, format = { "pretty", "html:target/cucumber/puccini/aws",
         "json:target/cucumber/puccini/cucumber-aws.json" })
-public class RunPucciniAmazonIT {
+public class RunPucciniAWSIT {
 }
