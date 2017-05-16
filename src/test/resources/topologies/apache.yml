@@ -1,17 +1,17 @@
-tosca_definitions_version: tosca_simple_yaml_1_0_0_wd03
+tosca_definitions_version: alien_dsl_1_3_0
 description: Apache topology
 template_name: apache
 template_version: 0.1.0-SNAPSHOT
 template_author: alien
 
 imports:
-  - tosca-normative-types:1.0.0-ALIEN12
-  - apache-type:2.0.0-SNAPSHOT
+  - tosca-normative-types:1.0.0-ALIEN14
+  - apache-type:1.4.0-SNAPSHOT
 
 topology_template:
   node_templates:
     Apache:
-      type: alien.nodes.Apache
+      type: org.alien4cloud.nodes.Apache
       requirements:
         - host:
             node: Compute

@@ -16,17 +16,12 @@ Feature: Usage of deployment artifacts with Puccini
     # Orchestrator and location
     And I create an orchestrator named "Mount doom orchestrator" and plugin name "alien4cloud-plugin-puccini" and bean name "puccini-orchestrator"
     And I get configuration for orchestrator "Mount doom orchestrator"
-    And I set the information AccessKeyId, AccessKeySecret, RegionID defined in the environment for the account AWS for puccini orchestrator "Mount doom orchestrator"
     And I enable the orchestrator "Mount doom orchestrator"
-    And I create a location named "AWS location" and infrastructure type "AWS" to the orchestrator "Mount doom orchestrator"
-    And I create a resource of type "org.alien4cloud.puccini.aws.nodes.Instance" named "Small" related to the location "Mount doom orchestrator"/"AWS location"
-    And I update the property "image_id" to "ami-47a23a30" for the resource named "Small" related to the location "Mount doom orchestrator"/"AWS location"
-    And I update the property "instance_type" to "t2.small" for the resource named "Small" related to the location "Mount doom orchestrator"/"AWS location"
-    And I update the property "key_name" to "Guobao" for the resource named "Small" related to the location "Mount doom orchestrator"/"AWS location"
-    And I update the property "security_groups" to a list "ssh_only" for the resource named "Small" related to the location "Mount doom orchestrator"/"AWS location"
-    And I update the property "user" to "ubuntu" for the resource named "Small" related to the location "Mount doom orchestrator"/"AWS location"
-    And I upload an artifact whose path is defined in the environment variable "key_content_path" for the property "key_content" of the resource named "Small" related to the location "Mount doom orchestrator"/"AWS location"
-    And I create a resource of type "org.alien4cloud.puccini.aws.nodes.PublicNetwork" named "Internet" related to the location "Mount doom orchestrator"/"AWS location"
+    And I create a location named "Local docker location" and infrastructure type "Docker" to the orchestrator "Mount doom orchestrator"
+    And I create a resource of type "org.alien4cloud.puccini.docker.nodes.Container" named "Ubuntu" related to the location "Mount doom orchestrator"/"Local docker location"
+    And I update the property "image_id" to "alien4cloud/puccini-ubuntu-trusty" for the resource named "Ubuntu" related to the location "Mount doom orchestrator"/"Local docker location"
+    And I create a resource of type "org.alien4cloud.puccini.docker.nodes.Network" named "Internet" related to the location "Mount doom orchestrator"/"Local docker location"
+    And I update the property "cidr" to "10.0.0.0/8" for the resource named "Internet" related to the location "Mount doom orchestrator"/"Local docker location"
 
     # Upload archives for plugin
     And I checkout the git archive from url "https://github.com/alien4cloud/alien4cloud-extended-types.git" branch "master"
@@ -35,8 +30,8 @@ Feature: Usage of deployment artifacts with Puccini
     And I successfully upload the local archive "csars/artifact-test"
     And I successfully upload the local archive "topologies/artifact_test"
 
-    And I create a new application with name "artifact-test-puccini" and description "Artifact test with Puccini" based on the template with name "artifact_test"
-    And I Set a unique location policy to "Mount doom orchestrator"/"AWS location" for all nodes
+    And I create a new application with name "artifact-test-puccini" and description "Artifact test with Puccini installed in local docker" based on the template with name "artifact_test"
+    And I Set a unique location policy to "Mount doom orchestrator"/"Local docker location" for all nodes
     And I upload a file located at "src/test/resources/data/toOverride.txt" to the archive path "toOverride.txt"
     And I execute the operation
       | type              | org.alien4cloud.tosca.editor.operations.nodetemplate.UpdateNodeDeploymentArtifactOperation |

@@ -15,7 +15,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import alien4cloud.it.Context;
+import alien4cloud.model.application.Application;
 import alien4cloud.rest.orchestrator.model.UpdateLocationResourceTemplatePropertyRequest;
+import alien4cloud.rest.topology.UpdatePropertyRequest;
 import alien4cloud.rest.utils.JsonUtil;
 import alien4cloud.utils.FileUtil;
 import cucumber.api.java.en.Given;
@@ -58,6 +60,30 @@ public class PucciniStepsDefinitions {
         }
         updatePropertyValue(orchestratorName, locationName, resourceName, propertyName, propertyList,
                 "/rest/v1/orchestrators/%s/locations/%s/resources/%s/template/properties");
+    }
+
+    @When("^I update the complex property \"(.*?)\" to \"\"\"(.*?)\"\"\" for the substituted node \"(.*?)\"$")
+    public void I_update_the_complex_property_to_for_the_subtituted_node(String propertyName, String propertyValue, String nodeName) throws Throwable {
+        Context context = Context.getInstance();
+        Application application = context.getApplication();
+        String envId = context.getDefaultApplicationEnvironmentId(application.getName());
+        UpdatePropertyRequest request;
+        propertyValue = propertyValue.trim();
+        if (propertyValue.startsWith("[") && propertyValue.endsWith("]")) {
+            if (propertyValue.startsWith("[{") && propertyValue.endsWith("}]")) {
+                request = new UpdatePropertyRequest(propertyName, JsonUtil.toList(propertyValue, Map.class));
+            } else {
+                request = new UpdatePropertyRequest(propertyName, JsonUtil.toList(propertyValue, String.class));
+            }
+        } else if (propertyValue.startsWith("{") && propertyValue.endsWith("}")) {
+            request = new UpdatePropertyRequest(propertyName, JsonUtil.toMap(propertyValue));
+        } else {
+            request = new UpdatePropertyRequest(propertyName, propertyValue);
+        }
+        String restUrl = String.format("/rest/v1/applications/%s/environments/%s/deployment-topology/substitutions/%s/properties", application.getId(), envId,
+                nodeName);
+        String response = Context.getRestClientInstance().postJSon(restUrl, JsonUtil.toString(request));
+        context.registerRestResponse(response);
     }
 
     private void updatePropertyValue(String orchestratorName, String locationName, String resourceName, String propertyName, Object propertyValue,
