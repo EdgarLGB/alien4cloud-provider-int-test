@@ -42,9 +42,6 @@ Feature: Deploy wordpress with puccini
     And I create a new application with name "wordpress-puccini" and description "Wordpress with Puccini" based on the template with name "wordpress-topology"
     And I Set a unique location policy to "Mount doom orchestrator"/"AWS location" for all nodes
 
-    And I set the following inputs properties
-      | os_distribution | ubuntu |
-
     When I deploy it
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes

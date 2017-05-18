@@ -44,9 +44,6 @@ Feature: Deploy wordpress with puccini in local docker
 
     And I Set a unique location policy to "Mount doom orchestrator"/"Local docker location" for all nodes
 
-    And I set the following inputs properties
-      | os_distribution | ubuntu |
-
     # Set the exposed ports and port mappings for the node computeWww
     And I update the complex property "exposed_ports" to """[{"protocol": "tcp", "port": "8888"}]""" for the substituted node "computeWww"
     And I update the complex property "port_mappings" to """[{"from": "8888", "to": "8888"}]""" for the substituted node "computeWww"
@@ -55,5 +52,4 @@ Feature: Deploy wordpress with puccini in local docker
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
 
-    # We need to make a port mapping for the docker case
     And The URL which is defined in attribute "wordpress_url" of the node "wordpress" should work

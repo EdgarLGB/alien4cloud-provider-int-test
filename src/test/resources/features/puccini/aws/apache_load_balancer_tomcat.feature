@@ -22,6 +22,8 @@ Feature: Apache load balancer + tomcat
     And I get configuration for orchestrator "Mount doom orchestrator"
     And I set the information AccessKeyId, AccessKeySecret, RegionID defined in the environment for the account AWS for puccini orchestrator "Mount doom orchestrator"
     And I enable the orchestrator "Mount doom orchestrator"
+
+    # Create the resources
     And I create a location named "AWS location" and infrastructure type "AWS" to the orchestrator "Mount doom orchestrator"
     And I create a resource of type "org.alien4cloud.puccini.aws.nodes.Instance" named "Small" related to the location "Mount doom orchestrator"/"AWS location"
     And I update the property "image_id" to "ami-47a23a30" for the resource named "Small" related to the location "Mount doom orchestrator"/"AWS location"

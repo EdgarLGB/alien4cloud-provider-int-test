@@ -1,4 +1,4 @@
-Feature: Deploy wordpress with puccini in local docker
+Feature: Deploy wordpress with puccini using byon
   # Tested features with this scenario:
   #   - Deployment of wordpress
   Scenario: Wordpress
@@ -44,10 +44,6 @@ Feature: Deploy wordpress with puccini in local docker
 
     And I Set a unique location policy to "Mount doom orchestrator"/"Byon location" for all nodes
 
-    And I set the following inputs properties
-      | os_distribution | ubuntu |
-
-
     # Configure the substituted compute node
     And I substitute on the current application the node "computeDb" with the location resource "Mount doom orchestrator"/"Byon location"/"UbuntuDb"
     And I substitute on the current application the node "computeWww" with the location resource "Mount doom orchestrator"/"Byon location"/"UbuntuWww"
@@ -56,5 +52,4 @@ Feature: Deploy wordpress with puccini in local docker
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
 
-    # We need to make a port mapping for the docker case
     And The URL which is defined in attribute "wordpress_url" of the node "wordpress" should work

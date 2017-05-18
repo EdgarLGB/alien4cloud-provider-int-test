@@ -1,0 +1,109 @@
+tosca_definitions_version: alien_dsl_1_4_0
+
+metadata:
+  template_name: wordpress-topology-openstack
+  template_version: 1.4.0-SNAPSHOT
+  template_author: alien4cloud
+
+description: Topology to deploy a Wordpress CMS on an apache webserver and a MySQL database.
+
+imports:
+  - tosca-normative-types:1.0.0-ALIEN14
+  - apache-type:1.4.0-SNAPSHOT
+  - mysql-type:1.4.0-SNAPSHOT
+  - php-type:1.4.0-SNAPSHOT
+  - wordpress-type:1.4.0-SNAPSHOT
+
+topology_template:
+  description: Wordpress deployment template
+  inputs:
+    os_distribution:
+      type: string
+      constraints:
+        - valid_values: [ debian, ubuntu, knoppix ]
+      description: The host Operating System (OS) architecture.
+      default: ubuntu
+  node_templates:
+    wordpress:
+      type: org.alien4cloud.nodes.Wordpress
+      requirements:
+        - host: apache
+        - database:
+            node: mysql
+            capability: org.alien4cloud.capabilities.MysqlDatabaseEndpoint
+        - php:
+            node: php
+            capability: org.alien4cloud.capabilities.PHPModule
+    php:
+      type: org.alien4cloud.nodes.PHP
+      requirements:
+        - host: computeWww
+    computeDb:
+      type: tosca.nodes.Compute
+      capabilities:
+        os:
+          properties:
+            type: linux
+            architecture: x86_64
+            distribution: { get_input: os_distribution }
+        host:
+          properties:
+            num_cpus: 1
+            disk_size: 1 GB
+            mem_size: 1024 MB
+            cpu_frequency: 1 GHz
+      requirements:
+        - network:
+            node: PrivateNetwork
+            capability: tosca.capabilities.Connectivity
+            relationship: tosca.relationships.Network
+        - network:
+            node: ExternalNetwork
+            capability: tosca.capabilities.Connectivity
+            relationship: tosca.relationships.Network
+    computeWww:
+      type: tosca.nodes.Compute
+      capabilities:
+        os:
+          properties:
+            type: linux
+            architecture: x86_64
+            distribution: { get_input: os_distribution }
+        host:
+          properties:
+            num_cpus: 1
+            disk_size: 1 GB
+            mem_size: 1024 MB
+            cpu_frequency: 1 GHz
+      requirements:
+        - network:
+            node: PrivateNetwork
+            capability: tosca.capabilities.Connectivity
+            relationship: tosca.relationships.Network
+        - network:
+            node: ExternalNetwork
+            capability: tosca.capabilities.Connectivity
+            relationship: tosca.relationships.Network
+    apache:
+      type: org.alien4cloud.nodes.Apache
+      properties:
+        port: 80
+        document_root: "/var/www"
+      requirements:
+        - host: computeWww
+    mysql:
+      type: org.alien4cloud.nodes.Mysql
+      requirements:
+        - host: computeDb
+    PrivateNetwork:
+      type: tosca.nodes.Network
+      properties:
+        ip_version: 4
+    ExternalNetwork:
+      type: tosca.nodes.Network
+      properties:
+        ip_version: 4
+  outputs:
+    wordpress_url:
+      description: The URL to access the wordpress
+      value: { get_attribute: [ wordpress, wordpress_url ] }

@@ -17,6 +17,8 @@ Feature: Usage of deployment artifacts with Puccini
     And I create an orchestrator named "Mount doom orchestrator" and plugin name "alien4cloud-plugin-puccini" and bean name "puccini-orchestrator"
     And I get configuration for orchestrator "Mount doom orchestrator"
     And I enable the orchestrator "Mount doom orchestrator"
+
+    # Create the resources
     And I create a location named "Local docker location" and infrastructure type "Docker" to the orchestrator "Mount doom orchestrator"
     And I create a resource of type "org.alien4cloud.puccini.docker.nodes.Container" named "Ubuntu" related to the location "Mount doom orchestrator"/"Local docker location"
     And I update the property "image_id" to "alien4cloud/puccini-ubuntu-trusty" for the resource named "Ubuntu" related to the location "Mount doom orchestrator"/"Local docker location"
@@ -43,7 +45,7 @@ Feature: Usage of deployment artifacts with Puccini
     Then I should receive a RestResponse with no error
     And The application's deployment must succeed after 15 minutes
 
-      # test preserved deployment artifats
+    # test preserved deployment artifats
     When I download the remote file "/home/ubuntu/Artifacts/toBePreserved.txt" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "ubuntu"
     Then The downloaded file should have the same content as the local file "csars/artifact-test/toBePreserved.txt"
     When I download the remote file "/home/ubuntu/ArtifactsYamlOverride/toBePreserved.txt" from the node "Compute" with the keypair defined in environment variable "key_content_path" and user "ubuntu"
