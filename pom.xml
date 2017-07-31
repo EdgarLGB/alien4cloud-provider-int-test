@@ -3,10 +3,10 @@
   <parent>
     <groupId>alien4cloud</groupId>
     <artifactId>alien4cloud-parent</artifactId>
-    <version>1.4.0-RC3-SNAPSHOT</version>
+    <version>1.4.1-SNAPSHOT</version>
   </parent>
   <artifactId>alien4cloud-provider-int-test</artifactId>
-  <version>1.4.0-RC3-SNAPSHOT</version>
+  <version>1.4.1-SNAPSHOT</version>
   <name>Provider end to end integration tests</name>
 
   <repositories>

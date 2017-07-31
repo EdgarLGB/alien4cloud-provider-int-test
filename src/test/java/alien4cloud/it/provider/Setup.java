@@ -82,17 +82,15 @@ public class Setup {
 
     private void cleanupCreatedResources() {
         Map<String, ComputeInstance> createdCompute = ByonStepDefinitions.CREATED_COMPUTES;
-        OpenStackClient osClient = Context.getInstance().getOpenStackClient();
-        Iterator<Entry<String, ComputeInstance>> entryIterator = createdCompute.entrySet().iterator();
-        while (entryIterator.hasNext()) {
-            ComputeInstance instance = entryIterator.next().getValue();
-            if (instance instanceof OpenstackComputeInstance) {
+        if (!createdCompute.isEmpty()) {
+            OpenStackClient osClient = Context.getInstance().getOpenStackClient();
+            createdCompute.entrySet().stream().filter(entry -> entry.getValue() instanceof OpenstackComputeInstance).forEach(entry -> {
+                ComputeInstance instance = entry.getValue();
                 osClient.deleteCompute(instance.getId());
                 if (StringUtils.isNotBlank(instance.getFloatingIpId())) {
                     osClient.deleteFloatingIp(instance.getFloatingIpId());
                 }
-                entryIterator.remove();
-            }
+            });
         }
     }
 
